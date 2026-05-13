@@ -1,29 +1,74 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <style>
-
-    </style>
+    <title>Расчет пенсии</title>
 </head>
 <body>
-    <div class = "formcalc">
-    <h2>Пенсионный калькулятор</h2>
-    <form id="formpensiya">
-        <div class="field">
-            <label for="age">Ваш возраст:</label>
-            <input type="number" id="age" required min="0" max="150">
-        </div>
+    <form id="f">
+        <p>
+            <label>Возраст: 
+                <input type="number" id="ageinput" required>
+            </label>
+        </p>
+        <p>
+            <label>
+                <input type="radio" name="gender" id="malegender" checked> Мужчина
+            </label>
+            <label>
+                <input type="radio" name="gender" id="femalegender"> Женщина
+            </label>
+        </p>
+        <p>
+            <label>Результат:<br>
+                <textarea id="result" autocomplete="off" readonly></textarea>
+            </label>
+        </p>
+        <input type="submit" value="Рассчитать">
+    </form>
 
-        <div class="field">
-            <label>Ваш пол:</label>
-            <div class="radio-group">
-                <label><input type="radio" name="gender" value="male" required> Мужской</label>
-                <label><input type="radio" name="gender" value="female" required> Женский</label>
-            </div>
-        </div>
-    </div>
+    <script>
+        'use strict';
+
+        
+        const f = document.getElementById('f');
+
+        
+        f.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            
+            const ageInputEl = document.getElementById('ageinput');
+            const maleGenderEl = document.getElementById('malegender');
+            const resultEl = document.getElementById('result');
+
+            
+            const age = parseInt(ageInputEl.value, 10);
+            const gender = maleGenderEl.checked; 
+
+            
+            if (isNaN(age) || age < 0) {
+                resultEl.value = "Да кто ты такой?";
+                return;
+            }
+
+            
+            if (age >= 0 && age <= 17) {
+                resultEl.value = "Вам работать ещё рано — учитесь";
+            }
+            else if ((age >= 18 && age <= 59 && gender) || (age >= 18 && age <= 54 && !gender)){
+                resultEl.value = "Вам ещё работать и работать";
+            }
+            else if ((age >= 60 && age <= 64 && gender) || (age >= 55 && age <= 59 && !gender)){
+                resultEl.value = "Скоро пенсия!";
+            }
+            else if ((age >= 65 && gender) || (age >= 60 && !gender)){
+                resultEl.value = "Вам пора на пенсию";
+            }
+            else {
+                resultEl.value = "Да кто ты такой?";
+            }
+        });
+    </script>
 </body>
 </html>
