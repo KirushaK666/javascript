@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CountCrow</title>
+</head>
+<body>
+    <form id="f">
+        <p>
+        <label for="number">Введите количество ворон:</label>
+        </p>
+        <input id="number" required>
+        <input id="result", type="submit", value="Рассчитать">
+    </form>
+    <script>
+        'use strict'
+        const f = document.getElementById('f');
+
+        f.addEventListener('submit', count);
+        function count(){
+            event.preventDefault();
+            if(!Number.isInteger(number)){
+                alert("Нужно ввести целое число!");
+            }
+            
+            const lastDigit = num % 10;
+            const lastTwoDigits = num % 100;
+            
+            let ending = "";
+
+            if (lastTwoDigits >= 11 && lastTwoDigits <= 14){
+                ending = "ворон";
+            } else {
+                switch (lastDigit){
+                    case 1:
+                        ending = "ворона";
+                        break;
+                    case 2:
+                    case 3:
+                    case 4:
+                        ending = "вороны";
+                        break;
+                    default: 
+                        ending = "ворон";
+                        break;
+                }
+            }
+            alert(`На ветке сидит ${num} ${ending}`);
+        }
+    </script>
+</body>
+</html>
