@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+ <head>
+  <meta charset="UTF-8">
+  <title>Таблица</title>
+ </head>
+ <body>
+
+  <form id="tableForm">
+   <p>
+    <label>
+     Введите количество строк:
+     <input id="rowsInput" type="number" min="1" required>
+    </label>
+   </p>
+
+   <input type="submit" value="Рисовать">
+  </form>
+
+  <script>
+   'use strict';
+
+   const tableForm = document.getElementById('tableForm');
+   const rowsInput = document.getElementById('rowsInput');
+
+   tableForm.addEventListener('submit', draw);
+
+   function draw(event) {
+       event.preventDefault();
+
+       const rowsCount = Number(rowsInput.value);
+       
+
+       const pattern = ['dog', 'dog', 'dog', 'cat', 'cat'];
+       const patternLength = pattern.length;
+       
+       let globalIndex = 0;
+
+       for (let i = 0; i < rowsCount; i++) {
+           let currentRow = [];
+
+           for (let j = 0; j < 6; j++) {
+               let animal = pattern[globalIndex % patternLength];
+               currentRow.push(animal);
+               globalIndex++;
+           }
+
+  
+           console.log(currentRow.join('\t'));
+       }
+   }
+  </script>
+
+ </body>
+</html>
