@@ -11,6 +11,7 @@
   <script>
    'use strict';
 
+   const link = document.getElementById('link');
    link.addEventListener('click', goToLink);
 
    function goToLink(event) {
@@ -26,21 +27,30 @@
            let x = prompt('Введите число, большее 100:');
 
            if (x === null) {
-               return false;
+               return false; 
            }
+
            if (x.trim() === '') {
-               continue;
+               alert('Вы ничего не ввели! Попробуйте еще раз.');
+               continue; 
            }
+           
            let num = Number(x);
 
+           if (isNaN(num)) {
+               alert('Вы ввели не число! Пожалуйста, введите цифры.');
+               continue; 
+           }
+        
            if (num === 5267) {
                alert('Вы ввели уникальное число!'); 
-               return true;
+               return true; 
+           }
+           if (num > 100) {
+               return true; 
            }
 
-           if (num > 100) {
-               return true;
-           }
+           alert('Ошибка! Число должно быть БОЛЬШЕ 100!);
        }
    }
   </script>
