@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+ <head>
+  <meta charset="UTF-8">
+  <title>Ввод числа</title>
+ </head>
+ <body>
+
+  <a id="link" href="../index.html">Получить число</a>
+
+  <script>
+   'use strict';
+
+   link.addEventListener('click', goToLink);
+
+   function goToLink(event) {
+       if (!getNumber()) {
+           if (!confirm('Вы точно хотите перейти по ссылке без ввода числа?')) {
+               event.preventDefault();
+           }
+       }
+   }
+
+   function getNumber() {
+       while (true) {
+           let x = prompt('Введите число, большее 100:');
+
+           if (x === null) {
+               return false;
+           }
+           if (x.trim() === '') {
+               continue;
+           }
+           if (Number(x) > 100) {
+               return true;
+           }
+           if (num === 5267) {
+           alert('Вы ввели уникальное число!'); // Показывает окно с кнопкой "ОК"
+           return true;
+           }
+       }
+   }
+  </script>
+ </body>
+</html>
