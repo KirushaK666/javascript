@@ -31,12 +31,15 @@
            if (x.trim() === '') {
                continue;
            }
-           if (Number(x) > 100) {
+           let num = Number(x);
+
+           if (num === 5267) {
+               alert('Вы ввели уникальное число!'); 
                return true;
            }
-           if (num === 5267) {
-           alert('Вы ввели уникальное число!'); // Показывает окно с кнопкой "ОК"
-           return true;
+
+           if (num > 100) {
+               return true;
            }
        }
    }
