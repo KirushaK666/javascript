@@ -17,9 +17,9 @@
         'use strict'
         const f = document.getElementById('f');
 
-        let num = parseInt(number.value, 10)
         f.addEventListener('submit', count);
         function count(){
+             let num = parseInt(number.value, 10)
             event.preventDefault();
             if(!Number.isInteger(num)){
                 alert("Нужно ввести целое число!");
