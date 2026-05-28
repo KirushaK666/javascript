@@ -6,6 +6,7 @@ import { fib } from '../lab2/lab2.js';
  * @param {number} num - исходное число.
  * @return {number} дробную часть num.
  */
+
 export function getDecimal(num) {
     const absNum = Math.abs(num); // Исправлен баг: добавлено взятие модуля для корректной работы с отрицательными числами
     return Number((absNum - Math.floor(absNum)).toFixed(15));
@@ -17,6 +18,7 @@ export function getDecimal(num) {
  * @param {string} url - ссылка.
  * @return {string} нормализованную url.
  */
+
 export function normalizeUrl(url) {
     if (url.startsWith('http://')) {
         return 'https://' + url.slice(7);
@@ -35,6 +37,7 @@ export function normalizeUrl(url) {
  * @param {string} str - исходная строка.
  * @return {boolean} true, если в str есть спам, иначе false.
  */
+
 export function checkSpam(str) {
     const lowerStr = str.toLowerCase();
     return lowerStr.includes('xxx') || lowerStr.includes('viagra');
@@ -47,6 +50,7 @@ export function checkSpam(str) {
  * @param {number} maxlength - максимальное число символов в возвращаемой строке.
  * @return {string} копию str, сокращённую до maxlength символов с троеточием в виде последнего символа, если её длина превышает maxlength, иначе просто str. 
  */
+
 export function truncate(str, maxlength) {
     if (str.length <= maxlength) {
         return str;
@@ -61,6 +65,7 @@ export function truncate(str, maxlength) {
  * @param {string} str - исходная строка.
  * @return {string} str в "верблюжьем стиле".
  */
+
 export function camelize(str) {
     const arr = str.split('-');
     return (arr[0] || '') + arr.slice(1).map(ucFirst).join('');
@@ -72,6 +77,7 @@ export function camelize(str) {
  * @param {string} str - исходная строка.
  * @return {string} str с первым символом в верхнем регистре.
  */
+
 function ucFirst(str) {
     if (!str) return str;
     return str[0].toUpperCase() + str.slice(1);
@@ -83,6 +89,7 @@ function ucFirst(str) {
  * @param {number} n - натуральное число, количество элементов в массиве.
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
+
 export function fibs(n) {
     if (!Number.isInteger(n) || n <= 0) {
         return null;
@@ -102,6 +109,7 @@ export function fibs(n) {
  * @param {number[]} arr - массив чисел.
  * @return {number[]} отсортированную по убыванию копию arr.
  */
+
 export function arrReverseSorted(arr) {
     return [...arr].sort(backwardsSort);
 }
@@ -113,6 +121,7 @@ export function arrReverseSorted(arr) {
  * @param {number} b - второе число.
  * @return {number} 1, если a < b, 0, если a == b, и -1, если a > b.
  */
+
 function backwardsSort(a, b) {
     if (a < b) return 1;
     if (a === b) return 0;
@@ -125,6 +134,7 @@ function backwardsSort(a, b) {
  * @param {Array} arr - массив.
  * @return {Array} копию arr без повторений.
  */
+
 export function unique(arr) {
     return [...new Set(arr)];
 }
