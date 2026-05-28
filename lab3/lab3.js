@@ -89,10 +89,8 @@ function ucFirst(str) {
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
 export function fibs(n) {
-    // Приведение к числу на случай, если n пришло строкой ("5")
     const num = Number(n);
     if (!Number.isInteger(num) || num <= 0) {
-        // Защита от BigInt и невалидных значений
         if (typeof n !== 'bigint' || n <= 0n) {
             return null;
         }
@@ -101,7 +99,6 @@ export function fibs(n) {
     const limit = Number(n);
     let arr = [];
     
-    // Быстрая генерация BigInt без просадки по времени и зависаний тестов
     for (let i = 0; i < limit; i++) {
         if (i === 0) arr.push(0n);
         else if (i === 1) arr.push(1n);
@@ -145,4 +142,4 @@ function backwardsSort(a, b) {
 export function unique(arr) {
     if (!arr) return [];
     return [...new Set(arr)];
-} 
+}
