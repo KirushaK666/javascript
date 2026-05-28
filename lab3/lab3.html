@@ -1,1 +1,107 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестирование lab3</title>
+    <link rel="stylesheet" href="https://cloudflare.com">
+    <script src="https://cloudflare.com"></script>
+    <script>
+        mocha.setup('bdd');
+    </script>
+    <script src="https://cloudflare.com"></script>
+    <script>
+        let assert = chai.assert;
+    </script>
+</head>
+
+<body>
+    <div id="mocha"></div>
+
+    <script type="module">
+        // Импортируем исправленные функции из файла
+        import { 
+            getDecimal, 
+            normalizeUrl, 
+            checkSpam, 
+            truncate, 
+            camelize, 
+            fibs, 
+            arrReverseSorted, 
+            unique 
+        } from './lab3.js';
+
+        describe("getDecimal", function () {
+            it("getDecimal(12.345) => 0.345", function () {
+                assert.strictEqual(getDecimal(12.345), 0.345);
+            });
+            it("getDecimal(-1.2) => 0.2", function () {
+                assert.strictEqual(getDecimal(-1.2), 0.2);
+            });
+        });
+
+        describe("normalizeUrl", function () {
+            it("Заменяет http:// на https://", function () {
+                assert.strictEqual(normalizeUrl("http://google.com"), "https://google.com");
+            });
+            it("Добавляет https:// если протокола нет", function () {
+                assert.strictEqual(normalizeUrl("yandex.ru"), "https://yandex.ru");
+            });
+        });
+
+        describe("checkSpam", function () {
+            it("Находит 'viagra'", function () {
+                assert.isTrue(checkSpam("buy VIAgra now"));
+            });
+            it("Находит 'xxx'", function () {
+                assert.isTrue(checkSpam("free xXx video"));
+            });
+            it("Чистая строка => false", function () {
+                assert.isFalse(checkSpam("hello world"));
+            });
+        });
+
+        describe("truncate", function () {
+            it("Обрезает длинную строку", function () {
+                assert.strictEqual(truncate("Всем привет!", 6), "Всем п…");
+            });
+            it("Не трогает короткую строку", function () {
+                assert.strictEqual(truncate("Привет", 10), "Привет");
+            });
+        });
+
+        describe("camelize", function () {
+            it("camelize('background-color') => 'backgroundColor'", function () {
+                assert.strictEqual(camelize("background-color"), "backgroundColor");
+            });
+        });
+
+        describe("fibs", function () {
+            it("Возвращает массив чисел Фибоначчи", function () {
+                assert.deepEqual(fibs(3), [0n, 1n, 1n]); 
+            });
+            it("Ненатуральное число => null", function () {
+                assert.isNull(fibs(-5));
+            });
+        </script>
+
+        describe("arrReverseSorted", function () {
+            it("Сортирует по убыванию", function () {
+                assert.deepEqual(arrReverseSorted([1, 5, 2]), [5, 2, 1]);
+            });
+        });
+
+        describe("unique", function () {
+            it("Удаляет дубликаты", function () {
+                assert.deepEqual(unique([1, 1, 2, 2, 3]), [1, 2, 3]);
+            });
+        });
+
+        mocha.run();
+    </script>
+</body>
+
+</html>
 
