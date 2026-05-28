@@ -128,14 +128,14 @@
                 assert.deepEqual(addBlackSpot({}), {[Symbol.for('blackSpot')]: true});
             });
 
-            it("addBlackSpot({obj) === obj", function () {
+            it("addBlackSpot(obj) === obj", function () {
                 let obj = {};
                 assert.strictEqual(addBlackSpot(obj), obj);
             });
 
-            it("addBlackSpot(obj) has property Symbol.for('blackSpot')=true}", function () {
-                let blackSpot = Symbol.for("blackSpot");
-                assert.propertyVal(addBlackSpot({}), Symbol.for("blackSpot"), true);
+            it("addBlackSpot(obj) has property Symbol.for('blackSpot')=true", function () {
+                let result = addBlackSpot({});
+                assert.strictEqual(result[Symbol.for("blackSpot")], true);
             });
 
         });
