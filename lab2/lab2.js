@@ -22,7 +22,7 @@ function factorial(n) {
     return result;
 }
 
-export function fib(n) {
+function fib(n) {
     if (n < 0) return 0n;
     if (n === 0) return 0n;
     if (n === 1 || n === 2) return 1n;
