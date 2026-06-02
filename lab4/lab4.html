@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Лабораторная работа №4: Объёкты, дата и время</title>
+</head>
+<body>
+
+<script>
+    'use strict';
+
+    // =========================================================================
+    // ЗАДАНИЯ 1, 2, 3: Класс Book
+    // =========================================================================
+
+    class Book {
+        // Объявление приватного поля для цены (Задание 2)
+        #price;
+
+        /**
+         * @param {string} t - название книги (непустая строка).
+         * @param {number} y - год публикации (положительное число).
+         * @param {number} p - цена (положительное число).
+         */
+        constructor(t, y, p) {
+            // Инициализируем свойства через сеттеры, чтобы сразу сработала валидация
+            this.title = t;
+            this.pubYear = y;
+            this.price = p;
+        }
+
+        /**
+         * Выводит в консоль название и цену книги (Задание 1).
+         */
+        show() {
+            console.log(`Книга: "${this.title}" | Цена: ${this.price} ₽`);
+        }
+
+        // --- Геттеры и сеттеры (Задание 2) ---
+
+        get title() {
+            return this._title;
+        }
+
+        set title(t) {
+            if (typeof t === 'string' && t.trim() !== '') {
+                this._title = t;
+            } else {
+                console.warn('Ошибка валидации: Название книги не должно быть пустой строкой.');
+            }
+        }
+
+        get pubYear() {
+            return this._pubYear; // Защищенное поле (по соглашению)
+        }
+
+        set pubYear(y) {
+            if (typeof y === 'number' && y > 0) {
+                this._pubYear = y;
+            } else {
+                console.warn('Ошибка валидации: Год публикации должен быть положительным числом.');
+            }
+        }
+
+        get price() {
+            return this.#price; // Приватное поле
+        }
+
+        set price(p) {
+            if (typeof p === 'number' && p > 0) {
+                this.#price = p;
+            } else {
+                console.warn('Ошибка валидации: Цена должна быть положительным числом.');
+            }
+        }
+
+        // --- Статический метод сравнения (Задание 3) ---
+        /**
+         * Сравнивает две книги по году публикации.
+         */
+        static compare(book1, book2) {
+            return book1.pubYear - book2.pubYear;
+        }
+    }
+
+    // --- Проверка Заданий 1, 2, 3 ---
+    console.log("%c--- Задания 1, 2, 3: Класс Book ---", "font-weight: bold; color: #2196F3;");
+
+    // 1. Создание и метод show()
+    let b1 = new Book('Мастер и Маргарита', 1966, 204);
+    b1.show();
+
+    // 2. Попытка изменить свойства (проверка валидации)
+    console.log("\nПроверка изменения свойств (хорошие данные):");
+    b1.title = 'Горе от ума';
+    b1.pubYear = 1825;
+    b1.price = 89;
+    b1.show();
+
+    console.log("\nПроверка валидации (плохие данные):");
+    b1.title = '';       // Ошибка в консоли
+    b1.pubYear = -100;   // Ошибка в консоли
+    b1.price = -5;       // Ошибка в консоли
+
+    // 3. Сортировка массива книг
+    console.log("\nСортировка книг по году публикации:");
+    let booksArray = [
+        new Book('Юность', 1857, 309),
+        new Book('Детство', 1852, 249),
+        new Book('Отрочество', 1854, 123)
+    ];
+
+    booksArray.sort(Book.compare);
+    booksArray.forEach(book => console.log(`${book.pubYear} г. — "${book.title}"`));
+
+
+    // =========================================================================
+    // ЗАДАНИЕ 4: Функция isEmpty(obj)
+    // =========================================================================
+    console.log("\n%c--- Задание 4: Функция isEmpty ---", "font-weight: bold; color: #2196F3;");
+
+    /**
+     * Проверяет объект на полное отсутствие свойств (включая скрытые и Symbol)
+     */
+    function isEmpty(obj) {
+        // Reflect.ownKeys возвращает ВСЕ свойства, включая неперечисляемые и символы
+        return Reflect.ownKeys(obj).length === 0;
+    }
+
+    console.log("isEmpty({}) ->", isEmpty({})); // true
+    console.log("isEmpty({[Symbol()]: true}) ->", isEmpty({[Symbol()]: true})); // false
+
+    let hiddenPropObj = Object.defineProperty({}, 'name', { value: 'John', enumerable: false });
+    console.log("isEmpty(объект со скрытым name) ->", isEmpty(hiddenPropObj)); // false
+
+
+    // =========================================================================
+    // ЗАДАНИЕ 5: Методы addClass и removeClass
+    // =========================================================================
+    console.log("\n%c--- Задание 5: Методы addClass и removeClass ---", "font-weight: bold; color: #2196F3;");
+
+    let obj = {
+        className: 'open menu',
+
+        addClass(cls) {
+            // Разбиваем строку на массив классов
+            let classes = this.className ? this.className.split(' ') : [];
+            // Использовать Set — отличный способ избежать дубликатов
+            let set = new Set(classes);
+
+            if (!set.has(cls)) {
+                classes.push(cls);
+                this.className = classes.join(' ');
+            }
+            return this; // Возвращаем сам объект для цепочки вызовов
+        },
+
+        removeClass(cls) {
+            if (!this.className) return this;
+
+            let classes = this.className.split(' ');
+            // Фильтруем, удаляя нужный класс
+            classes = classes.filter(item => item !== cls);
+
+            this.className = classes.join(' ');
+            return this;
+        }
+    };
+
+    console.log(`Исходный className: "${obj.className}"`);
+    console.log(`После addClass('navigation'): "${obj.addClass('navigation').className}"`);
+    console.log(`Повторный addClass('navigation') не должен дублировать: "${obj.addClass('navigation').className}"`);
+    console.log(`После removeClass('menu'): "${obj.removeClass('menu').className}"`);
+
+
+    // =========================================================================
+    // ЗАДАНИЕ 6: Работа с JSON
+    // =========================================================================
+    console.log("\n%c--- Задание 6: JSON ---", "font-weight: bold; color: #2196F3;");
+
+    // Сериализация с отступом в 2 пробела
+    let jsonStr = JSON.stringify(obj, null, 2);
+    console.log("Объект в формате JSON:\n" + jsonStr);
+
+    // Десериализация в новый объект
+    let obj2 = JSON.parse(jsonStr);
+
+    // Проверка на равенство.
+    // Настоящие объекты сравнивать через == нельзя (они в разных местах памяти).
+    // Сравниваем их строковые JSON представления, чтобы доказать идентичность данных.
+    if (JSON.stringify(obj) === JSON.stringify(obj2)) {
+        console.log('Результат проверки: obj и obj2 идентичны по структуре и значениям.');
+    } else {
+        console.log('Результат проверки: obj и obj2 не равны.');
+    }
+
+
+    // =========================================================================
+    // ЗАДАНИЕ 7: Количество секунд с начала дня
+    // =========================================================================
+    console.log("\n%c--- Задание 7: getSecondsToday ---", "font-weight: bold; color: #2196F3;");
+
+    function getSecondsToday() {
+        let now = new Date();
+        // Создаем объект даты на сегодняшнюю полночь
+        let midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+        // Разница в миллисекундах переводится в секунды
+        return Math.round((now - midnight) / 1000);
+    }
+
+    console.log(`Секунд с начала сегодняшнего дня: ${getSecondsToday()}`);
+
+
+    // =========================================================================
+    // ЗАДАНИЕ 8: Форматирование даты
+    // =========================================================================
+    console.log("\n%c--- Задание 8: formatDate ---", "font-weight: bold; color: #2196F3;");
+
+    /**
+     * Форматирует дату в "дд.мм.гг"
+     * @param {Date} date
+     */
+    function formatDate(date) {
+        if (!(date instanceof Date)) return 'Некорректная дата';
+
+        let d = date.getDate();
+        let m = date.getMonth() + 1; // Месяцы в JS идут с 0
+        let y = date.getFullYear() % 100; // Получаем две последние цифры года
+
+        // Добавляем ведущие нули, если число меньше 10
+        if (d < 10) d = '0' + d;
+        if (m < 10) m = '0' + m;
+        if (y < 10) y = '0' + y;
+
+        return `${d}.${m}.${y}`;
+    }
+
+    console.log(`Текущая дата (дд.мм.гг): ${formatDate(new Date())}`);
+    console.log(`Проверка на старой дате (например, 5 января 2004 года): ${formatDate(new Date(2004, 0, 5))}`);
+
+</script>
+
+<noscript>
+    <p style="color: red; font-weight: bold;">Страница может работать некорректно, т.к. отключена поддержка JS.</p>
+</noscript>
+
+</body>
+</html>
