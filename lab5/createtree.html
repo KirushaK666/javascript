@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+ <head>
+  <meta charset="UTF-8">
+  <title>createTree</title>
+ </head>
+ <body>
+
+  <div id="container"></div>
+
+  <script>
+   'use strict';
+
+   /*
+   * Функция, создающая при помощи рекурсии иерархию неупорядоченных списков из объекта.
+   * @param {object} элемент, внутри которого будет создана иерархия.
+   * @param {object} объект, из которого будет создаваться иерархия.
+   * @return {string} иерархию в виде HTML-текста.
+   */
+   function createTree(cont, obj) {
+
+       let s = '';
+
+       if (Reflect.ownKeys(obj).length) {
+           s += '<ul>';
+
+           for (let i in obj) {
+               s += `<li>${i}${createTree(cont, obj[i])}</li>`;
+           }
+
+           s += '</ul>';
+   
+           cont.innerHTML = s;
+       }
+
+       return s;
+
+   }
+
+   let data = {"Рыбы": {
+		   "форель": {},
+		   "лосось": {}
+	   },	  
+	   "Деревья": {
+		   "Огромные": {
+			   "секвойя": {},
+			   "дуб": {}
+		   },
+		   "Цветковые": {
+			   "яблоня": {},
+		       "магнолия": {}
+		   }
+	   }
+   };
+   
+
+   let container = document.getElementById('container');
+   createTree(container, data);
+  </script>
+  
+ </body>
+</html>
