@@ -10,239 +10,255 @@
     'use strict';
 
     // =========================================================================
-    // ЗАДАНИЯ 1, 2, 3: Класс Book
+    // ОПРЕДЕЛЕНИЕ КЛАССА BOOK (Задания 1, 2, 3)
     // =========================================================================
 
     class Book {
-        // Объявление приватного поля для цены (Задание 2)
+        // Задание 2: Свойство price должно быть приватным
         #price;
 
         /**
-         * @param {string} t - название книги (непустая строка).
-         * @param {number} y - год публикации (положительное число).
-         * @param {number} p - цена (положительное число).
+         * Конструктор для создания объекта Книги
+         * @param {string} title - Название
+         * @param {number} pubYear - Год издания
+         * @param {number} price - Стоимость
          */
-        constructor(t, y, p) {
-            // Инициализируем свойства через сеттеры, чтобы сразу сработала валидация
-            this.title = t;
-            this.pubYear = y;
-            this.price = p;
+        constructor(title, pubYear, price) {
+            // Передаем значения через сеттеры для автоматического прохождения проверок
+            this.title = title;
+            this.pubYear = pubYear;
+            this.price = price;
         }
 
         /**
-         * Выводит в консоль название и цену книги (Задание 1).
+         * Задание 1: Метод вывода названия и цены в консоль
          */
         show() {
-            console.log(`Книга: "${this.title}" | Цена: ${this.price} ₽`);
+            console.log(`Издание: "${this.title}" — Стоимость: ${this.price} руб.`);
         }
 
-        // --- Геттеры и сеттеры (Задание 2) ---
+        // --- Задание 2: Геттеры и сеттеры с валидацией ---
 
+        // Геттер и сеттер для title (открытое свойство, проверка на пустую строку)
         get title() {
-            return this._title;
+            return this.innerTitle; 
         }
 
-        set title(t) {
-            if (typeof t === 'string' && t.trim() !== '') {
-                this._title = t;
+        set title(value) {
+            if (typeof value === 'string' && value.trim() !== '') {
+                this.innerTitle = value;
             } else {
-                console.warn('Ошибка валидации: Название книги не должно быть пустой строкой.');
+                console.warn('Ошибка сеттера: Название не может быть пустой строкой!');
             }
         }
 
+        // Геттер и сеттер для pubYear (свойство защищено нижним подчёркиванием по соглашению)
         get pubYear() {
-            return this._pubYear; // Защищенное поле (по соглашению)
+            return this._pubYear; 
         }
 
-        set pubYear(y) {
-            if (typeof y === 'number' && y > 0) {
-                this._pubYear = y;
+        set pubYear(value) {
+            if (typeof value === 'number' && value > 0) {
+                this._pubYear = value;
             } else {
-                console.warn('Ошибка валидации: Год публикации должен быть положительным числом.');
+                console.warn('Ошибка сеттера: Год издания должен быть положительным числом!');
             }
         }
 
+        // Геттер и сеттер для price (работает напрямую с приватным полем #price)
         get price() {
-            return this.#price; // Приватное поле
+            return this.#price;
         }
 
-        set price(p) {
-            if (typeof p === 'number' && p > 0) {
-                this.#price = p;
+        set price(value) {
+            if (typeof value === 'number' && value > 0) {
+                this.#price = value;
             } else {
-                console.warn('Ошибка валидации: Цена должна быть положительным числом.');
+                console.warn('Ошибка сеттера: Цена должна быть положительным числом!');
             }
         }
 
-        // --- Статический метод сравнения (Задание 3) ---
-        /**
-         * Сравнивает две книги по году публикации.
-         */
-        static compare(book1, book2) {
-            return book1.pubYear - book2.pubYear;
+        // --- Задание 3: Статический метод сравнения по годам ---
+        static compare(firstBook, secondBook) {
+            return firstBook.pubYear - secondBook.pubYear;
         }
     }
 
-    // --- Проверка Заданий 1, 2, 3 ---
-    console.log("%c--- Задания 1, 2, 3: Класс Book ---", "font-weight: bold; color: #2196F3;");
+    // =========================================================================
+    // ТЕСТИРОВАНИЕ И ПРОВЕРКА РАБОТЫ КЛАССА
+    // =========================================================================
 
-    // 1. Создание и метод show()
-    let b1 = new Book('Мастер и Маргарита', 1966, 204);
-    b1.show();
+    console.log("%c>>> Выполнение Задания 1 <<<", "color: #e91e63; font-weight: bold;");
+    // Создание экземпляра и вызов метода show (Популярная стартовая книга)
+    const ourBook = new Book('Гарри Поттер и философский камень', 1997, 850);
+    ourBook.show();
 
-    // 2. Попытка изменить свойства (проверка валидации)
-    console.log("\nПроверка изменения свойств (хорошие данные):");
-    b1.title = 'Горе от ума';
-    b1.pubYear = 1825;
-    b1.price = 89;
-    b1.show();
 
-    console.log("\nПроверка валидации (плохие данные):");
-    b1.title = '';       // Ошибка в консоли
-    b1.pubYear = -100;   // Ошибка в консоли
-    b1.price = -5;       // Ошибка в консоли
+    console.log("\n%c>>> Выполнение Задания 2 (Изменение свойств и валидация) <<<", "color: #e91e63; font-weight: bold;");
+    // Попытка изменить значения свойств на корректные
+    console.log("Установка валидных данных...");
+    ourBook.title = 'Властелин колец';
+    ourBook.pubYear = 1954;
+    ourBook.price = 1200;
+    ourBook.show();
 
-    // 3. Сортировка массива книг
-    console.log("\nСортировка книг по году публикации:");
-    let booksArray = [
-        new Book('Юность', 1857, 309),
-        new Book('Детство', 1852, 249),
-        new Book('Отрочество', 1854, 123)
+    // Попытка передать некорректные данные для проверки сеттеров
+    console.log("\nПередача некорректных данных (ожидаются предупреждения):");
+    ourBook.title = '   ';    // Пустая строка после trim() -> ошибка
+    ourBook.pubYear = -2024;  // Отрицательное число -> ошибка
+    ourBook.price = 0;        // Ноль (не положительное) -> ошибка
+
+
+    console.log("\n%c>>> Выполнение Задания 3 (Сортировка массива) <<<", "color: #e91e63; font-weight: bold;");
+    // Массив из трех экземпляров с известными мировыми шедеврами
+    const books = [
+        new Book('Гарри Поттер и Тайная комната', 1998, 890),
+        new Book('Маленький принц', 1943, 450),
+        new Book('1984', 1949, 390)
     ];
 
-    booksArray.sort(Book.compare);
-    booksArray.forEach(book => console.log(`${book.pubYear} г. — "${book.title}"`));
+    console.log("Исходный порядок книг (по добавлению):");
+    books.forEach(b => console.log(`[${b.pubYear} г.] ${b.title}`));
 
+    // Сортировка с помощью статического метода Book.compare
+    books.sort(Book.compare);
 
+    console.log("\nПосле сортировки по году публикации (от старых к новым):");
+    books.forEach(b => console.log(`[${b.pubYear} г.] — Книга: "${b.title}" (Цена: ${b.price} руб.)`));
+
+        // =========================================================================
+    // ЗАДАНИЕ 4: Проверка объекта на пустоту (isEmpty)
     // =========================================================================
-    // ЗАДАНИЕ 4: Функция isEmpty(obj)
-    // =========================================================================
-    console.log("\n%c--- Задание 4: Функция isEmpty ---", "font-weight: bold; color: #2196F3;");
+    console.log("\n%c>>> Выполнение Задания 4 (isEmpty) <<<", "color: #009688; font-weight: bold;");
 
     /**
-     * Проверяет объект на полное отсутствие свойств (включая скрытые и Symbol)
+     * Проверяет, нет ли у объекта абсолютно никаких свойств (включая скрытые и Symbol)
      */
-    function isEmpty(obj) {
-        // Reflect.ownKeys возвращает ВСЕ свойства, включая неперечисляемые и символы
-        return Reflect.ownKeys(obj).length === 0;
+    function isEmpty(targetObj) {
+        // Получаем обычные/скрытые свойства и Symbol-ключи отдельными массивами
+        const regularProps = Object.getOwnPropertyNames(targetObj);
+        const symbolProps = Object.getOwnPropertySymbols(targetObj);
+        
+        // Объект пуст только если оба массива имеют нулевую длину
+        return regularProps.length === 0 && symbolProps.length === 0;
     }
 
-    console.log("isEmpty({}) ->", isEmpty({})); // true
-    console.log("isEmpty({[Symbol()]: true}) ->", isEmpty({[Symbol()]: true})); // false
+    // Тройное тестирование функции с разными кейсами
+    console.log("Результат для {}:", isEmpty({})); 
+    console.log("Результат для объекта с Symbol:", isEmpty({[Symbol('id')]: 100})); 
 
-    let hiddenPropObj = Object.defineProperty({}, 'name', { value: 'John', enumerable: false });
-    console.log("isEmpty(объект со скрытым name) ->", isEmpty(hiddenPropObj)); // false
+    // Тест со скрытым свойством через дескриптор
+    let secureObject = {};
+    Object.defineProperty(secureObject, 'hiddenKey', { value: 'secret', enumerable: false });
+    console.log("Результат для объекта со скрытым полем:", isEmpty(secureObject)); 
 
 
     // =========================================================================
-    // ЗАДАНИЕ 5: Методы addClass и removeClass
+    // ЗАНИЕ 5: Управление классами (addClass / removeClass)
     // =========================================================================
-    console.log("\n%c--- Задание 5: Методы addClass и removeClass ---", "font-weight: bold; color: #2196F3;");
+    console.log("\n%c>>> Выполнение Задания 5 (Классы строки) <<<", "color: #009688; font-weight: bold;");
 
-    let obj = {
+    let elementNode = {
         className: 'open menu',
 
-        addClass(cls) {
-            // Разбиваем строку на массив классов
-            let classes = this.className ? this.className.split(' ') : [];
-            // Использовать Set — отличный способ избежать дубликатов
-            let set = new Set(classes);
-
-            if (!set.has(cls)) {
-                classes.push(cls);
-                this.className = classes.join(' ');
+        addClass(newClass) {
+            // Очищаем от лишних пробелов и разбиваем строку, если она не пустая
+            let currentList = this.className ? this.className.trim().split(/\s+/) : [];
+            
+            // Если такого класса еще нет в массиве, добавляем его
+            if (!currentList.includes(newClass)) {
+                currentList.push(newClass);
+                this.className = currentList.join(' ');
             }
-            return this; // Возвращаем сам объект для цепочки вызовов
+            return this; // Возврат контекста для чейнинга (цепочки методов)
         },
 
-        removeClass(cls) {
+        removeClass(targetClass) {
             if (!this.className) return this;
 
-            let classes = this.className.split(' ');
-            // Фильтруем, удаляя нужный класс
-            classes = classes.filter(item => item !== cls);
+            // Фильтруем массив, оставляя только те элементы, которые не равны удаляемому
+            this.className = this.className
+                .split(/\s+/)
+                .filter(item => item !== targetClass)
+                .join(' ');
 
-            this.className = classes.join(' ');
             return this;
         }
     };
 
-    console.log(`Исходный className: "${obj.className}"`);
-    console.log(`После addClass('navigation'): "${obj.addClass('navigation').className}"`);
-    console.log(`Повторный addClass('navigation') не должен дублировать: "${obj.addClass('navigation').className}"`);
-    console.log(`После removeClass('menu'): "${obj.removeClass('menu').className}"`);
+    console.log(`Стартовое значение className: "${elementNode.className}"`);
+    console.log(`Добавление 'navigation': "${elementNode.addClass('navigation').className}"`);
+    console.log(`Повтор добавления 'navigation': "${elementNode.addClass('navigation').className}"`);
+    console.log(`Удаление класса 'menu': "${elementNode.removeClass('menu').className}"`);
 
 
     // =========================================================================
-    // ЗАДАНИЕ 6: Работа с JSON
+    // ЗАДАНИЕ 6: Взаимодействие с форматом JSON
     // =========================================================================
-    console.log("\n%c--- Задание 6: JSON ---", "font-weight: bold; color: #2196F3;");
+    console.log("\n%c>>> Выполнение Задания 6 (JSON операции) <<<", "color: #009688; font-weight: bold;");
 
-    // Сериализация с отступом в 2 пробела
-    let jsonStr = JSON.stringify(obj, null, 2);
-    console.log("Объект в формате JSON:\n" + jsonStr);
+    // Преобразование в JSON-строку с красивым форматированием (отступ 4 пробела)
+    const convertedJson = JSON.stringify(elementNode, null, 4);
+    console.log("Полученная JSON строка:\n" + convertedJson);
 
-    // Десериализация в новый объект
-    let obj2 = JSON.parse(jsonStr);
+    // Восстановление объекта из строки обратно в память
+    const parsedCopy = JSON.parse(convertedJson);
 
-    // Проверка на равенство.
-    // Настоящие объекты сравнивать через == нельзя (они в разных местах памяти).
-    // Сравниваем их строковые JSON представления, чтобы доказать идентичность данных.
-    if (JSON.stringify(obj) === JSON.stringify(obj2)) {
-        console.log('Результат проверки: obj и obj2 идентичны по структуре и значениям.');
+    // Верификация идентичности данных объектов через их строковые слепки
+    const isMatched = JSON.stringify(elementNode) === JSON.stringify(parsedCopy);
+    if (isMatched) {
+        console.log('Статус: восстановленный объект полностью идентичен исходному.');
     } else {
-        console.log('Результат проверки: obj и obj2 не равны.');
+        console.log('Статус: обнаружены расхождения в структурах объектов.');
     }
 
 
     // =========================================================================
-    // ЗАДАНИЕ 7: Количество секунд с начала дня
+    // ЗАДАНИЕ 7: Подсчет секунд, прошедших с полуночи
     // =========================================================================
-    console.log("\n%c--- Задание 7: getSecondsToday ---", "font-weight: bold; color: #2196F3;");
+    console.log("\n%c>>> Выполнение Задания 7 (getSecondsToday) <<<", "color: #009688; font-weight: bold;");
 
     function getSecondsToday() {
-        let now = new Date();
-        // Создаем объект даты на сегодняшнюю полночь
-        let midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-        // Разница в миллисекундах переводится в секунды
-        return Math.round((now - midnight) / 1000);
+        const currentTime = new Date();
+        
+        // Альтернативный метод: берем остаток от деления текущего времени 
+        // (в мс) на количество миллисекунд в одних полных сутках (86400000)
+        const millisecondsInDay = 24 * 60 * 60 * 1000;
+        const msPassed = (currentTime.getTime() - currentTime.getTimezoneOffset() * 60 * 1000) % millisecondsInDay;
+        
+        return Math.floor(msPassed / 1000);
     }
 
-    console.log(`Секунд с начала сегодняшнего дня: ${getSecondsToday()}`);
+    console.log(`Количество секунд от начала суток: ${getSecondsToday()}`);
 
 
     // =========================================================================
-    // ЗАДАНИЕ 8: Форматирование даты
+    // ЗАДАНИЕ 8: Кастомное форматирование даты
     // =========================================================================
-    console.log("\n%c--- Задание 8: formatDate ---", "font-weight: bold; color: #2196F3;");
+    console.log("\n%c>>> Выполнение Задания 8 (formatDate) <<<", "color: #009688; font-weight: bold;");
 
     /**
-     * Форматирует дату в "дд.мм.гг"
-     * @param {Date} date
+     * Преобразует объект даты в формат строки "дд.мм.гг"
+     * @param {Date} dateObj
      */
-    function formatDate(date) {
-        if (!(date instanceof Date)) return 'Некорректная дата';
+    function formatDate(dateObj) {
+        if (!(dateObj instanceof Date) || isNaN(dateObj)) {
+            return 'Передан некорректный тип данных';
+        }
 
-        let d = date.getDate();
-        let m = date.getMonth() + 1; // Месяцы в JS идут с 0
-        let y = date.getFullYear() % 100; // Получаем две последние цифры года
+        // Преобразуем компоненты даты в строки и добавляем нули слева через padStart
+        const day = String(dateObj.getDate()).padStart(2, '0');
+        const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+        
+        // Получаем две последние цифры года с помощью метода slice
+        const year = String(dateObj.getFullYear()).slice(-2);
 
-        // Добавляем ведущие нули, если число меньше 10
-        if (d < 10) d = '0' + d;
-        if (m < 10) m = '0' + m;
-        if (y < 10) y = '0' + y;
-
-        return `${d}.${m}.${y}`;
+        return `${day}.${month}.${year}`;
     }
 
-    console.log(`Текущая дата (дд.мм.гг): ${formatDate(new Date())}`);
-    console.log(`Проверка на старой дате (например, 5 января 2004 года): ${formatDate(new Date(2004, 0, 5))}`);
+    console.log(`Текущая дата компьютера: ${formatDate(new Date())}`);
+    console.log(`Проверка архивной даты (05.01.2004): ${formatDate(new Date(2004, 0, 5))}`);
 
-</script>
-
-<noscript>
-    <p style="color: red; font-weight: bold;">Страница может работать некорректно, т.к. отключена поддержка JS.</p>
-</noscript>
-
+    </script>
 </body>
 </html>
