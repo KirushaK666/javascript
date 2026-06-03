@@ -1,5 +1,3 @@
-import { fib as oldFib } from '../lab2/lab2.js';
-
 /**
  * Возвращает x в степени целого числа n.
  *
