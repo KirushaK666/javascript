@@ -6,7 +6,7 @@ import { fib } from '../lab2/lab2.js';
  * @param {number} num - исходное число.
  * @return {number} дробную часть num.
  */
-export function getDecimal(num) {
+function getDecimal(num) {
     if (!num) return 0;
     const absNum = Math.abs(num); 
     // Округление до 15 знаков спасает от ошибок плавающей точки в JS (например, 0.1 + 0.2)
@@ -19,7 +19,7 @@ export function getDecimal(num) {
  * @param {string} url - ссылка.
  * @return {string} нормализованную url.
  */
-export function normalizeUrl(url) {
+function normalizeUrl(url) {
     if (!url) return 'https://';
 
     if (url.startsWith('http://')) {
@@ -39,7 +39,7 @@ export function normalizeUrl(url) {
  * @param {string} str - исходная строка.
  * @return {boolean} true, если в str есть спам, иначе false.
  */
-export function checkSpam(str) {
+function checkSpam(str) {
     if (!str) return false;
     const lowerStr = str.toLowerCase();
     return lowerStr.includes('xxx') || lowerStr.includes('viagra');
@@ -52,7 +52,7 @@ export function checkSpam(str) {
  * @param {number} maxlength - максимальное число символов в возвращаемой строке.
  * @return {string} копию str, сокращённую до maxlength символов с троеточием в виде последнего символа, если её длина превышает maxlength, иначе просто str. 
  */
-export function truncate(str, maxlength) {
+function truncate(str, maxlength) {
     if (!str) return '';
     if (str.length <= maxlength) {
         return str;
@@ -67,7 +67,7 @@ export function truncate(str, maxlength) {
  * @param {string} str - исходная строка.
  * @return {string} str в "верблюжьем стиле".
  */
-export function camelize(str) {
+function camelize(str) {
     if (!str) return '';
     return str
         .split('-')
@@ -93,7 +93,7 @@ function ucFirst(str) {
  * @param {number|bigint} n - натуральное число, количество элементов в массиве.
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
-export function fibs(n) {
+function fibs(n) {
     // Валидация: проверяем, что n — целое положительное число (для Number и BigInt)
     const isNumValid = Number.isInteger(Number(n)) && Number(n) > 0;
     const isBigIntValid = typeof n === 'bigint' && n > 0n;
@@ -125,7 +125,7 @@ export function fibs(n) {
  * @param {number[]} arr - массив чисел.
  * @return {number[]} отсортированную по убыванию копию arr.
  */
-export function arrReverseSorted(arr) {
+function arrReverseSorted(arr) {
     if (!arr) return [];
     // Используем деструктуризацию [...arr], чтобы не мутировать исходный массив
     return [...arr].sort((a, b) => b - a);
@@ -137,7 +137,7 @@ export function arrReverseSorted(arr) {
  * @param {Array} arr - массив.
  * @return {Array} копию arr без повторений.
  */
-export function unique(arr) {
+function unique(arr) {
     if (!arr) return [];
     // Set автоматически удаляет все дубликаты
     return [...new Set(arr)];
