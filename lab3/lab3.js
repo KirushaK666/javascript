@@ -6,7 +6,7 @@ import { fib } from '../lab2/lab2.js';
  * @param {number} num - исходное число.
  * @return {number} дробную часть num.
  */
-function getDecimal(num) {
+export function getDecimal(num) {
     if (!num) return 0;
     const absNum = Math.abs(num); 
     // Округление до 15 знаков спасает от ошибок плавающей точки в JS (например, 0.1 + 0.2)
@@ -19,7 +19,7 @@ function getDecimal(num) {
  * @param {string} url - ссылка.
  * @return {string} нормализованную url.
  */
-function normalizeUrl(url) {
+export function normalizeUrl(url) {
     if (!url) return 'https://';
 
     if (url.startsWith('http://')) {
@@ -39,7 +39,7 @@ function normalizeUrl(url) {
  * @param {string} str - исходная строка.
  * @return {boolean} true, если в str есть спам, иначе false.
  */
-function checkSpam(str) {
+export function checkSpam(str) {
     if (!str) return false;
     const lowerStr = str.toLowerCase();
     return lowerStr.includes('xxx') || lowerStr.includes('viagra');
@@ -52,7 +52,7 @@ function checkSpam(str) {
  * @param {number} maxlength - максимальное число символов в возвращаемой строке.
  * @return {string} копию str, сокращённую до maxlength символов с троеточием в виде последнего символа, если её длина превышает maxlength, иначе просто str. 
  */
-function truncate(str, maxlength) {
+export function truncate(str, maxlength) {
     if (!str) return '';
     if (str.length <= maxlength) {
         return str;
@@ -67,7 +67,7 @@ function truncate(str, maxlength) {
  * @param {string} str - исходная строка.
  * @return {string} str в "верблюжьем стиле".
  */
-function camelize(str) {
+export function camelize(str) {
     if (!str) return '';
     return str
         .split('-')
@@ -82,7 +82,7 @@ function camelize(str) {
  * @param {string} str - исходная строка.
  * @return {string} str с первым символом в верхнем регистре.
  */
-function ucFirst(str) {
+export function ucFirst(str) {
     if (!str) return str;
     return str[0].toUpperCase() + str.slice(1);
 }
@@ -93,27 +93,19 @@ function ucFirst(str) {
  * @param {number|bigint} n - натуральное число, количество элементов в массиве.
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
-function fibs(n) {
-    // Валидация: проверяем, что n — целое положительное число (для Number и BigInt)
+export function fibs(n) {
+    // Проверяем валидность n
     const isNumValid = Number.isInteger(Number(n)) && Number(n) > 0;
     const isBigIntValid = typeof n === 'bigint' && n > 0n;
     
     if (!isNumValid && !isBigIntValid) return null;
 
-    // Приводим к BigInt для безопасных итераций и сравнения без потери точности
-    const limit = BigInt(n);
+    const limit = Number(n);
     let arr = [];
     
-    for (let i = 0n; i < limit; i++) {
-        if (i === 0n) {
-            arr.push(0n);
-        } else if (i === 1n) {
-            arr.push(1n);
-        } else {
-            // Для работы с индексами массива преобразуем i обратно в Number
-            const idx = Number(i);
-            arr.push(arr[idx - 1] + arr[idx - 2]);
-        }
+    // Используем импортированную функцию fib(i) для каждого элемента массива
+    for (let i = 0; i < limit; i++) {
+        arr.push(fib(i));
     }
 
     return arr;
@@ -125,7 +117,7 @@ function fibs(n) {
  * @param {number[]} arr - массив чисел.
  * @return {number[]} отсортированную по убыванию копию arr.
  */
-function arrReverseSorted(arr) {
+export function arrReverseSorted(arr) {
     if (!arr) return [];
     // Используем деструктуризацию [...arr], чтобы не мутировать исходный массив
     return [...arr].sort((a, b) => b - a);
@@ -137,7 +129,7 @@ function arrReverseSorted(arr) {
  * @param {Array} arr - массив.
  * @return {Array} копию arr без повторений.
  */
-function unique(arr) {
+export function unique(arr) {
     if (!arr) return [];
     // Set автоматически удаляет все дубликаты
     return [...new Set(arr)];
