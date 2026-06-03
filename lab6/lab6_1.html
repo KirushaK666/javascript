@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+ <head>
+  <meta charset="UTF-8">
+  <title>Жанры музыки</title>
+ </head>
+ <body>
+
+  <select id="genres">
+   <option value="Rock">Рок</option>
+   <option value="Blues" selected>Блюз</option>
+  </select>
+
+  <script>
+   'use strict';
+
+   for (let i of genres.children) {
+       if (i.selected) {
+           console.log(`Выбрана опция со значением "${i.value}" и текстом "${i.innerText}".`);
+           break;
+       }
+   }
+
+   genres.innerHTML += '<option value="Classic">Классика</option>';
+   genres.children[genres.children.length - 1].selected = true;
+
+  </script>
+  <noscript>Страница может работать некорректно, т.к. отключена поддержка JS.</noscript>
+
+ </body>
+</html>
