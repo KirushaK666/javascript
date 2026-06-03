@@ -134,3 +134,15 @@ export function unique(arr) {
     // Set автоматически удаляет все дубликаты
     return [...new Set(arr)];
 }
+
+// Регистрируем функции глобально, чтобы старый код тестов Mocha смог их увидеть
+if (typeof window !== 'undefined') {
+    window.getDecimal = getDecimal;
+    window.normalizeUrl = normalizeUrl;
+    window.checkSpam = checkSpam;
+    window.truncate = truncate;
+    window.camelize = camelize;
+    window.fibs = fibs;
+    window.arrReverseSorted = arrReverseSorted;
+    window.unique = unique;
+}
