@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактируемый div</title>
+</head>
+<body>
+
+  <div id="view"></div>
+  <textarea id="editor" hidden></textarea>
+
+  <script>
+    'use strict';
+
+    const view = document.getElementById('view');
+    const editor = document.getElementById('editor');
+
+    const savedText = localStorage.getItem('editable_text');
+    if (savedText) {
+        view.innerHTML = savedText;
+        editor.value = savedText;
+    } else {
+        view.innerHTML = 'Нажмите Ctrl+E для редактирования';
+        editor.value = 'Нажмите Ctrl+E для редактирования';
+    }
+
+    document.addEventListener('keydown', action);
+
+    function action(event) {
+
+        if (event.code === 'KeyE' && event.ctrlKey) {
+            event.preventDefault();
+            
+            editor.hidden = false;
+            view.hidden = true;
+            editor.focus(); 
+            return;
+        }
+
+
+        if (event.code === 'KeyS' && event.ctrlKey) {
+            event.preventDefault();
+            editor.hidden = true;
+            view.hidden = false;
+            view.innerHTML = editor.value;
+            localStorage.setItem('editable_text', editor.value);
+            return;
+        }
+
+        if (event.code === 'Escape') {
+            if (editor.hidden) return;
+
+            editor.hidden = true;
+            view.hidden = false;
+            editor.value = view.innerHTML;
+            return;
+        }
+    }
+  </script>
+
+</body>
+</html>
