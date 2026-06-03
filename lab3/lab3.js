@@ -7,7 +7,9 @@ import { fib } from '../lab2/lab2.js';
  * @return {number} дробную часть num.
  */
 export function getDecimal(num) {
+    if (!num) return 0;
     const absNum = Math.abs(num); 
+    // Округление до 15 знаков спасает от ошибок плавающей точки в JS (например, 0.1 + 0.2)
     return Number((absNum - Math.floor(absNum)).toFixed(15));
 }
 
@@ -55,7 +57,7 @@ export function truncate(str, maxlength) {
     if (str.length <= maxlength) {
         return str;
     }
-    if (maxlength <= 0) return '\u2026'; 
+    if (maxlength <= 0) return '\u2026'; // Если лимит 0 или отрицательный, возвращаем только троеточие
     return str.slice(0, maxlength - 1) + '\u2026';
 }
 
@@ -67,12 +69,15 @@ export function truncate(str, maxlength) {
  */
 export function camelize(str) {
     if (!str) return '';
-    const arr = str.split('-');
-    return (arr[0] || '') + arr.slice(1).map(ucFirst).join('');
+    return str
+        .split('-')
+        // Первый элемент оставляем как есть (важно, если строка начинается с дефиса), остальные делаем с заглавной буквы
+        .map((word, index) => index === 0 ? word : ucFirst(word))
+        .join('');
 }
 
 /**
- * Возвращает строку с первым символом в верхнем регистре.
+ * Возвращает строку с первым слымволом в верхнем регистре.
  *
  * @param {string} str - исходная строка.
  * @return {string} str с первым символом в верхнем регистре.
@@ -85,24 +90,30 @@ function ucFirst(str) {
 /**
  * Возвращает массив из чисел Фибоначчи, начиная с нулевого.
  *
- * @param {number} n - натуральное число, количество элементов в массиве.
+ * @param {number|bigint} n - натуральное число, количество элементов в массиве.
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
 export function fibs(n) {
-    const num = Number(n);
-    if (!Number.isInteger(num) || num <= 0) {
-        if (typeof n !== 'bigint' || n <= 0n) {
-            return null;
-        }
-    }
+    // Валидация: проверяем, что n — целое положительное число (для Number и BigInt)
+    const isNumValid = Number.isInteger(Number(n)) && Number(n) > 0;
+    const isBigIntValid = typeof n === 'bigint' && n > 0n;
+    
+    if (!isNumValid && !isBigIntValid) return null;
 
-    const limit = Number(n);
+    // Приводим к BigInt для безопасных итераций и сравнения без потери точности
+    const limit = BigInt(n);
     let arr = [];
     
-    for (let i = 0; i < limit; i++) {
-        if (i === 0) arr.push(0n);
-        else if (i === 1) arr.push(1n);
-        else arr.push(arr[i - 1] + arr[i - 2]);
+    for (let i = 0n; i < limit; i++) {
+        if (i === 0n) {
+            arr.push(0n);
+        } else if (i === 1n) {
+            arr.push(1n);
+        } else {
+            // Для работы с индексами массива преобразуем i обратно в Number
+            const idx = Number(i);
+            arr.push(arr[idx - 1] + arr[idx - 2]);
+        }
     }
 
     return arr;
@@ -116,21 +127,8 @@ export function fibs(n) {
  */
 export function arrReverseSorted(arr) {
     if (!arr) return [];
-    return [...arr].sort(backwardsSort);
-}
-
-/**
- * Критерий сортировки чисел по убыванию.
- *
- * @param {number} a - первое число.
- * @param {number} b - второе число.
- * @return {number} 1, если a < b, 0, если a == b, и -1, если a > b.
- */
-function backwardsSort(a, b) {
-    if (a < b) return 1;
-    if (a === b) return 0;
-    if (a > b) return -1;
-    return 0;
+    // Используем деструктуризацию [...arr], чтобы не мутировать исходный массив
+    return [...arr].sort((a, b) => b - a);
 }
 
 /**
@@ -141,5 +139,6 @@ function backwardsSort(a, b) {
  */
 export function unique(arr) {
     if (!arr) return [];
+    // Set автоматически удаляет все дубликаты
     return [...new Set(arr)];
 }
