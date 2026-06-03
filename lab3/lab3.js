@@ -1,4 +1,4 @@
-import { fib } from '../lab2/lab2.js?v=1';
+import { fib } from '../lab2/lab2.js';
 
 
 /**
