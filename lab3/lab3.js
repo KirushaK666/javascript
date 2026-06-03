@@ -8,8 +8,9 @@ import { fib } from '../lab2/lab2.js';
  */
 export function getDecimal(num) {
     if (!num) return 0;
-    const absNum = Math.abs(num); 
-    return Number((absNum - Math.floor(absNum)).toFixed(15));
+    const str = Math.abs(num).toString();
+    if (!str.includes('.')) return 0;
+    return Number('0.' + str.split('.')[1]);
 }
 
 /**
