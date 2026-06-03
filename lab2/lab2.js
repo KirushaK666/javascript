@@ -80,7 +80,7 @@ function factorial(n) {
  * @param {number} n - целое число.
  * @returns {bigint} Число Фибоначчи в формате BigInt.
  */
-function fib(n) {
+export function fib(n) {
     if (!Number.isInteger(n)) return NaN;
     if (n === 0) return 0n;
 
