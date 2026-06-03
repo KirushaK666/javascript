@@ -3,6 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <title>Редактируемый div</title>
+  <style>
+    #view, #editor {
+      width: 300px;
+      height: 100px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      box-sizing: border-box;
+    }
+  </style>
 </head>
 <body>
 
@@ -16,11 +25,12 @@
     const editor = document.getElementById('editor');
 
     const savedText = localStorage.getItem('editable_text');
+    
     if (savedText) {
-        view.innerHTML = savedText;
+        view.innerText = savedText;
         editor.value = savedText;
     } else {
-        view.innerHTML = 'Нажмите Ctrl+E для редактирования';
+        view.innerText = 'Нажмите Ctrl+E для редактирования';
         editor.value = 'Нажмите Ctrl+E для редактирования';
     }
 
@@ -28,7 +38,9 @@
 
     function action(event) {
 
-        if (event.code === 'KeyE' && event.ctrlKey) {
+        if (event.code === 'KeyE' && (event.ctrlKey || event.metaKey)) {
+            if (!editor.hidden) return; 
+            
             event.preventDefault();
             editor.hidden = false;
             view.hidden = true;
@@ -36,12 +48,14 @@
             return;
         }
 
+        if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
+            if (editor.hidden) return; 
 
-        if (event.code === 'KeyS' && event.ctrlKey) {
             event.preventDefault();
             editor.hidden = true;
             view.hidden = false;
-            view.innerHTML = editor.value;
+            
+            view.innerText = editor.value;
             localStorage.setItem('editable_text', editor.value);
             return;
         }
@@ -51,7 +65,8 @@
 
             editor.hidden = true;
             view.hidden = false;
-            editor.value = view.innerHTML;
+            editor.value = view.innerText;
+            editor.blur(); // Убираем активный фокус с textarea
             return;
         }
     }
