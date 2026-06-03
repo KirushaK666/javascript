@@ -9,7 +9,7 @@ import { fib } from '../lab2/lab2.js';
  */
 export function getDecimal(num) {
     if (!num) return 0;
-    // ИСПРАВЛЕНО: Добавлен Math.abs(), чтобы для -1.2 возвращалось 0.2, а не 0.8
+    // ИСПРАВЛЕНО: Добавлен Math.abs(), чтобы избавиться от знака минус перед разделением строки
     const str = Math.abs(num).toString();
     if (!str.includes('.')) return 0;
     return Number('0.' + str.split('.')[1]);
@@ -60,6 +60,7 @@ export function truncate(str, maxlength) {
         return str;
     }
     if (maxlength <= 0) return '…';
+    // ИСПРАВЛЕНО: Заменено '...' на специальный символ '…' под требования теста
     return str.slice(0, maxlength - 1) + '…';
 }
 
