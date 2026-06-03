@@ -5,7 +5,7 @@
  * @param {number} n - степень, должна быть целым числом.
  * @return {number} NaN, если n - нецелое или x = 0 и n = 0, в остальных случаях x в степени n.
  */
-export function pow(x, n) {
+function pow(x, n) {
     if (!Number.isInteger(n)) return NaN;
     if (x === 0 && n === 0) return NaN;
     if (n === 0) return 1; 
@@ -30,7 +30,7 @@ export function pow(x, n) {
  * @param {number} n - максимальное натуральное число, входящее в сумму.
  * @return {number} NaN, если n - не натуральное, в остальных случаях сумму чисел от 1 до n.
  */
-export const sumTo = function(n) {
+const sumTo = function(n) {
     if (!Number.isInteger(n) || n < 1) {
         return NaN;
     }
@@ -49,7 +49,7 @@ export const sumTo = function(n) {
  * @param {number} year - номер года.
  * @return {boolean} true, если year соответствует високосному году, а в остальных случаях - false.
  */
-export function isLeapYear(year) {
+function isLeapYear(year) {
     return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0);
 }
 
@@ -59,7 +59,7 @@ export function isLeapYear(year) {
  * @param {number} n - неотрицательное число.
  * @returns {bigint} Факториал числа в формате BigInt.
  */
-export function factorial(n) {
+function factorial(n) {
     if (!Number.isInteger(n) || n < 0) {
         return NaN;
     }
@@ -79,7 +79,7 @@ export function factorial(n) {
  * @param {number} n - целое число.
  * @returns {bigint} Число Фибоначчи в формате BigInt.
  */
-export function fib(n) {
+function fib(n) {
     if (!Number.isInteger(n)) return NaN;
     if (n === 0) return 0n;
 
@@ -108,7 +108,7 @@ export function fib(n) {
  * @param {number} x - целое число.
  * @return {null|Function} null, если x - нецелое, в остальных случаях - анонимную функцию.
  */
-export function compare(x) {
+function compare(x) {
     if (!Number.isInteger(x)) {
         return null;
     }
@@ -126,7 +126,7 @@ export function compare(x) {
  * @param {...number} args - числа для суммирования.
  * @return {number} сумму чисел из args.
  */
-export function sum(...args) {
+function sum(...args) {
     let s = 0;
     for (let i of args) {
         s += i;
@@ -140,7 +140,7 @@ export function sum(...args) {
  * @param {object} obj - объект.
  * @return {object} тот же объект obj, но с новым свойством blackSpot.
  */
-export function addBlackSpot(obj) {
+function addBlackSpot(obj) {
     obj[Symbol.for('blackSpot')] = true;
     return obj;
 }
