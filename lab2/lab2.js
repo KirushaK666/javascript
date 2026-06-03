@@ -5,7 +5,7 @@
  * @param {number} n - степень, должна быть целым числом.
  * @return {number} NaN, если n - нецелое или x = 0 и n = 0, в остальных случаях x в степени n.
  */
-function pow(x, n) {
+export function pow(x, n) {
     if (!Number.isInteger(n)) return NaN;
     if (x === 0 && n === 0) return NaN;
     if (n === 0) return 1; 
@@ -30,9 +30,8 @@ function pow(x, n) {
  * @param {number} n - максимальное натуральное число, входящее в сумму.
  * @return {number} NaN, если n - не натуральное, в остальных случаях сумму чисел от 1 до n.
  */
-const sumTo = (n) => {
+export const sumTo = function(n) {
     if (!Number.isInteger(n) || n < 1) {
-        if (typeof n !== 'number') return NaN;
         return NaN;
     }
     
@@ -50,7 +49,7 @@ const sumTo = (n) => {
  * @param {number} year - номер года.
  * @return {boolean} true, если year соответствует високосному году, а в остальных случаях - false.
  */
-function isLeapYear(year) {
+export function isLeapYear(year) {
     return (year % 400 === 0) || (year % 4 === 0 && year % 100 !== 0);
 }
 
@@ -60,7 +59,7 @@ function isLeapYear(year) {
  * @param {number} n - неотрицательное число.
  * @returns {bigint} Факториал числа в формате BigInt.
  */
-function factorial(n) {
+export function factorial(n) {
     if (!Number.isInteger(n) || n < 0) {
         return NaN;
     }
@@ -109,7 +108,7 @@ export function fib(n) {
  * @param {number} x - целое число.
  * @return {null|Function} null, если x - нецелое, в остальных случаях - анонимную функцию.
  */
-function compare(x) {
+export function compare(x) {
     if (!Number.isInteger(x)) {
         return null;
     }
@@ -121,11 +120,13 @@ function compare(x) {
     };
 }
 
-/*
+/**
+ * Возвращает сумму передаваемых чисел.
+ *
  * @param {...number} args - числа для суммирования.
  * @return {number} сумму чисел из args.
  */
-function sum(...args) {
+export function sum(...args) {
     let s = 0;
     for (let i of args) {
         s += i;
@@ -133,11 +134,24 @@ function sum(...args) {
     return s;
 }
 
-/*
+/**
+ * Возвращает объект с добавленным скрытым свойством blackSpot со значением true.
+ *
  * @param {object} obj - объект.
  * @return {object} тот же объект obj, но с новым свойством blackSpot.
  */
-function addBlackSpot(obj) {
+export function addBlackSpot(obj) {
     obj[Symbol.for('blackSpot')] = true;
     return obj;
+}
+
+if (typeof window !== 'undefined') {
+    window.pow = pow;
+    window.sumTo = sumTo;
+    window.isLeapYear = isLeapYear;
+    window.factorial = factorial;
+    window.fib = fib;
+    window.compare = compare;
+    window.sum = sum;
+    window.addBlackSpot = addBlackSpot;
 }
