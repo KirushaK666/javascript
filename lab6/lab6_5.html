@@ -3,17 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Модальное окно</title>
-  <!DOCTYPE html>
-<html lang="ru">
-<head>
-  <meta charset="UTF-8">
-  <title>Форма</title>
- <style>
-    body {
-      background-color: #f4f5f6;
-      font-family: system-ui, -apple-system, sans-serif;
-    }
-
+  <style>
     #prompt-overlay {
       position: fixed;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -34,10 +24,10 @@
       border: none; 
     }
   </style>
-
 </head>
 <body>
 
+  <!-- Кнопка запуска теперь только одна -->
   <button id="start-btn">Запустить окно</button>
 
   <div id="prompt-overlay" hidden>
@@ -46,91 +36,6 @@
       <input type="text" id="prompt-input"><br><br>
       <button id="prompt-ok">OK</button>
       <button id="prompt-cancel">ОТМЕНА</button>
-    </div>
-  </div>
-
-  <script>
-    'use strict';
-
-    const overlay = document.getElementById('prompt-overlay');
-    const msgDiv = document.getElementById('prompt-message');
-    const input = document.getElementById('prompt-input');
-    const okBtn = document.getElementById('prompt-ok');
-    const cancelBtn = document.getElementById('prompt-cancel');
-
-    function showPrompt(html, callback) {
-      overlay.hidden = false;
-      msgDiv.innerHTML = html; 
-      
-      input.value = ''; 
-      input.focus();    
-
-      function close() {
-        overlay.hidden = true;
-        okBtn.onclick = null;
-        cancelBtn.onclick = null;
-        document.onkeydown = null;
-      }
-
-      okBtn.onclick = function() {
-        const val = input.value;
-        close();
-        callback(val);
-      };
-
-      cancelBtn.onclick = function() {
-        close();
-        callback(null);
-      };
-
-      document.onkeydown = function(event) {
-        if (event.code === 'Escape') {
-          close();
-          callback(null);
-        }
-
-        if (event.code === 'Enter') {
-          const val = input.value;
-          close();
-          callback(val);
-        }
-
-        if (event.code === 'Tab') {
-          if (document.activeElement === cancelBtn && !event.shiftKey) {
-            input.focus(); 
-            event.preventDefault();
-          }
-          if (document.activeElement === input && event.shiftKey) {
-            cancelBtn.focus(); 
-            event.preventDefault();
-          }
-        }
-      };
-    }
-
-
-    document.getElementById('start-btn').onclick = function() {
-      showPrompt("Введите что-нибудь<br>... умное :)", function(value) {
-        alert("Результат: " + value);
-      });
-    };
-  </script>
-
-</body>
-</html>
-</head>
-<body>
-
-  <button id="start-btn">Запустить окно</button>
-
-  <div id="prompt-overlay" hidden>
-    <div id="prompt-form-container">
-      <div id="prompt-message"></div>
-      <input type="text" id="prompt-input">
-      <div class="button-group">
-        <button id="prompt-cancel" class="btn">ОТМЕНА</button>
-        <button id="prompt-ok" class="btn">OK</button>
-      </div>
     </div>
   </div>
 
