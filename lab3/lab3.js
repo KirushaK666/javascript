@@ -7,10 +7,7 @@ import { fib } from '../lab2/lab2.js';
  * @return {number} дробную часть num.
  */
 export function getDecimal(num) {
-    if (!num) return 0;
-    const absNum = Math.abs(num); 
-    // Округление до 15 знаков спасает от ошибок плавающей точки в JS (например, 0.1 + 0.2)
-    return Number((absNum - Math.floor(absNum)).toFixed(15));
+    return Number((num - Math.floor(num)).toFixed(15));
 }
 
 /**
@@ -20,8 +17,7 @@ export function getDecimal(num) {
  * @return {string} нормализованную url.
  */
 export function normalizeUrl(url) {
-    if (!url) return 'https://';
-
+    // Безопасная замена строго в начале строки
     if (url.startsWith('http://')) {
         return 'https://' + url.slice(7);
     }
@@ -40,8 +36,8 @@ export function normalizeUrl(url) {
  * @return {boolean} true, если в str есть спам, иначе false.
  */
 export function checkSpam(str) {
-    if (!str) return false;
     const lowerStr = str.toLowerCase();
+    // Избыточный тернарный оператор удален
     return lowerStr.includes('xxx') || lowerStr.includes('viagra');
 }
 
@@ -53,11 +49,9 @@ export function checkSpam(str) {
  * @return {string} копию str, сокращённую до maxlength символов с троеточием в виде последнего символа, если её длина превышает maxlength, иначе просто str. 
  */
 export function truncate(str, maxlength) {
-    if (!str) return '';
     if (str.length <= maxlength) {
         return str;
     }
-    if (maxlength <= 0) return '\u2026'; // Если лимит 0 или отрицательный, возвращаем только троеточие
     return str.slice(0, maxlength - 1) + '\u2026';
 }
 
@@ -68,21 +62,18 @@ export function truncate(str, maxlength) {
  * @return {string} str в "верблюжьем стиле".
  */
 export function camelize(str) {
-    if (!str) return '';
-    return str
-        .split('-')
-        // Первый элемент оставляем как есть (важно, если строка начинается с дефиса), остальные делаем с заглавной буквы
-        .map((word, index) => index === 0 ? word : ucFirst(word))
-        .join('');
+    const arr = str.split('-');
+    // Чтобы избежать ошибок с пустыми массивами, берем первый элемент или пустую строку
+    return (arr[0] || '') + arr.slice(1).map(ucFirst).join('');
 }
 
 /**
- * Возвращает строку с первым слымволом в верхнем регистре.
+ * Возвращает строку с первым символом в верхнем регистре.
  *
  * @param {string} str - исходная строка.
  * @return {string} str с первым символом в верхнем регистре.
  */
-export function ucFirst(str) {
+function ucFirst(str) {
     if (!str) return str;
     return str[0].toUpperCase() + str.slice(1);
 }
@@ -90,7 +81,7 @@ export function ucFirst(str) {
 /**
  * Возвращает массив из чисел Фибоначчи, начиная с нулевого.
  *
- * @param {number|bigint} n - натуральное число, количество элементов в массиве.
+ * @param {number} n - натуральное число, количество элементов в массиве.
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
 export function fibs(n) {
@@ -107,7 +98,6 @@ export function fibs(n) {
     return arr;
 }
 
-
 /**
  * Возвращает отсортированную по убыванию копию массива чисел.
  *
@@ -115,9 +105,21 @@ export function fibs(n) {
  * @return {number[]} отсортированную по убыванию копию arr.
  */
 export function arrReverseSorted(arr) {
-    if (!arr) return [];
-    // Используем деструктуризацию [...arr], чтобы не мутировать исходный массив
-    return [...arr].sort((a, b) => b - a);
+    // Красивое и современное копирование массива через спред-оператор
+    return [...arr].sort(backwardsSort);
+}
+
+/**
+ * Критерий сортировки чисел по убыванию.
+ *
+ * @param {number} a - первое число.
+ * @param {number} b - второе число.
+ * @return {number} 1, если a < b, 0, если a == b, и -1, если a > b.
+ */
+function backwardsSort(a, b) {
+    if (a < b) return 1;
+    if (a === b) return 0;
+    if (a > b) return -1;
 }
 
 /**
@@ -127,19 +129,6 @@ export function arrReverseSorted(arr) {
  * @return {Array} копию arr без повторений.
  */
 export function unique(arr) {
-    if (!arr) return [];
-    // Set автоматически удаляет все дубликаты
+    // Создание массива из Set в одну строчку
     return [...new Set(arr)];
-}
-
-// Регистрируем функции глобально, чтобы старый код тестов Mocha смог их увидеть
-if (typeof window !== 'undefined') {
-    window.getDecimal = getDecimal;
-    window.normalizeUrl = normalizeUrl;
-    window.checkSpam = checkSpam;
-    window.truncate = truncate;
-    window.camelize = camelize;
-    window.fibs = fibs;
-    window.arrReverseSorted = arrReverseSorted;
-    window.unique = unique;
 }
