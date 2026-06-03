@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Красивое модальное окно</title>
+  <style>
+    /* Базовые стили для страницы */
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: #f5f5f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    /* Стильная кнопка запуска */
+    #start-btn {
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 500;
+      color: #white;
+      background-color: #0071e3;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    #start-btn:hover {
+      background-color: #0077ed;
+    }
+
+    /* Задний полупрозрачный фон */
+    #prompt-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: 999;
+      backdrop-filter: blur(4px); /* Лёгкое размытие заднего плана */
+    }
+
+    /* Контейнер формы */
+    #prompt-form-container {
+      position: fixed;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); /* Мягкая тень */
+      z-index: 1000;
+      width: 300px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px; /* Современные отступы между элементами вместо <br> */
+    }
+
+    /* Текст сообщения */
+    #prompt-message {
+      font-size: 16px;
+      line-height: 1.4;
+      color: #333;
+    }
+
+    /* Поле ввода */
+    #prompt-input {
+      padding: 10px 12px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    #prompt-input:focus {
+      border-color: #0071e3;
+      box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    }
+
+    /* Блок с кнопками */
+    .button-group {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+
+    /* Кнопки внутри модального окна */
+    .btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    #prompt-ok {
+      background-color: #0071e3;
+      color: white;
+    }
+
+    #prompt-ok:hover {
+      background-color: #0077ed;
+    }
+
+    #prompt-cancel {
+      background-color: #e8e8ed;
+      color: #424245;
+    }
+
+    #prompt-cancel:hover {
+      background-color: #d2d2d7;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="start-btn">Запустить окно</button>
+
+  <div id="prompt-overlay" hidden>
+    <div id="prompt-form-container">
+      <div id="prompt-message"></div>
+      <input type="text" id="prompt-input">
+      <div class="button-group">
+        <button id="prompt-cancel" class="btn">ОТМЕНА</button>
+        <button id="prompt-ok" class="btn">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    'use strict';
+
+    const overlay = document.getElementById('prompt-overlay');
+    const msgDiv = document.getElementById('prompt-message');
+    const input = document.getElementById('prompt-input');
+    const okBtn = document.getElementById('prompt-ok');
+    const cancelBtn = document.getElementById('prompt-cancel');
+
+    function showPrompt(html, callback) {
+      overlay.hidden = false;
+      msgDiv.innerHTML = html; 
+      
+      input.value = ''; 
+      input.focus();    
+
+      function close() {
+        overlay.hidden = true;
+        okBtn.onclick = null;
+        cancelBtn.onclick = null;
+        document.onkeydown = null;
+      }
+
+      okBtn.onclick = function() {
+        const val = input.value;
+        close();
+        callback(val);
+      };
+
+      cancelBtn.onclick = function() {
+        close();
+        callback(null);
+      };
+
+      document.onkeydown = function(event) {
+        if (event.code === 'Escape') {
+          close();
+          callback(null);
+        }
+
+        if (event.code === 'Enter') {
+          const val = input.value;
+          close();
+          callback(val);
+        }
+
+        if (event.code === 'Tab') {
+          if (document.activeElement === cancelBtn && !event.shiftKey) {
+            input.focus(); 
+            event.preventDefault();
+          }
+          if (document.activeElement === input && event.shiftKey) {
+            cancelBtn.focus(); 
+            event.preventDefault();
+          }
+        }
+      };
+    }
+
+    document.getElementById('start-btn').onclick = function() {
+      showPrompt("Введите что-нибудь<br>... умное :)", function(value) {
+        alert("Результат: " + value);
+      });
+    };
+  </script>
+
+</body>
+</html>
