@@ -94,22 +94,19 @@ export function ucFirst(str) {
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
 export function fibs(n) {
-    // Проверяем валидность n
-    const isNumValid = Number.isInteger(Number(n)) && Number(n) > 0;
-    const isBigIntValid = typeof n === 'bigint' && n > 0n;
-    
-    if (!isNumValid && !isBigIntValid) return null;
+    // Надежная проверка на натуральное число
+    if (!Number.isInteger(n) || n <= 0) {
+        return null;
+    }
 
-    const limit = Number(n);
     let arr = [];
-    
-    // Используем импортированную функцию fib(i) для каждого элемента массива
-    for (let i = 0; i < limit; i++) {
-        arr.push(fib(i));
+    for (let i = 0; i < n; i++) {
+        arr[i] = fib(i);
     }
 
     return arr;
 }
+
 
 /**
  * Возвращает отсортированную по убыванию копию массива чисел.
