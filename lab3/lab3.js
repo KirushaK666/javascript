@@ -1,16 +1,18 @@
 import { fib } from '../lab2/lab2.js';
 
 /**
- * Возвращает дробную часть числа.
+ * Возвращает математическую дробную часть числа.
+ * Для отрицательных чисел (например, -1.23) возвращает остаток до следующего целого (0.77).
  *
  * @param {number} num - исходное число.
  * @return {number} дробную часть num.
  */
 export function getDecimal(num) {
-    if (!num) return 0;
-    const str = Math.abs(num).toString();
-    if (!str.includes('.')) return 0;
-    return Number('0.' + str.split('.')[1]);
+    if (!Number.isFinite(num)) return 0;
+    // Математически правильный остаток от деления на 1
+    let result = num - Math.floor(num);
+    // Избавляемся от багов округления JS (например, 0.2300000000004)
+    return Number(result.toFixed(12));
 }
 
 /**
@@ -55,35 +57,26 @@ export function checkSpam(str) {
 export function truncate(str, maxlength) {
     if (!str) return '';
     if (str.length <= maxlength) {
+        // Тесты вашего друга требуют именно символ "…" (двоеточие/троеточие), а не три отдельные точки
         return str;
     }
-    if (maxlength <= 0) return '\u2026';
-    return str.slice(0, maxlength - 1) + '\u2026';
+    if (maxlength <= 0) return '…';
+    return str.slice(0, maxlength - 1) + '…';
 }
 
 /**
  * Переводит строку в "верблюжий стиль", удаляя дефисы и переводя буквы в этих местах в верхний регистр.
+ * Поддерживает один или несколько дефисов подряд.
  *
  * @param {string} str - исходная строка.
  * @return {string} str в "верблюжьем стиле".
  */
 export function camelize(str) {
     if (!str) return '';
-    return str
-        .split('-')
-        .map((word, index) => index === 0 ? word : ucFirst(word))
-        .join('');
-}
-
-/**
- * Возвращает строку с первым символом в верхнем регистре.
- *
- * @param {string} str - исходная строка.
- * @return {string} str с первым символом в верхнем регистре.
- */
-function ucFirst(str) {
-    if (!str) return str;
-    return str[0].toUpperCase() + str.slice(1);
+    // Регулярное выражение находит один или более дефисов и букву после них
+    return str.replace(/-+(.)/g, function(match, chr) {
+        return chr.toUpperCase();
+    });
 }
 
 /**
@@ -107,12 +100,14 @@ export function fibs(n) {
 
 /**
  * Возвращает отсортированную по убыванию копию массива чисел.
+ * Не изменяет оригинальный массив!
  *
  * @param {number[]} arr - массив чисел.
  * @return {number[]} отсортированную по убыванию копию arr.
  */
 export function arrReverseSorted(arr) {
     if (!arr) return [];
+    // Делаем копию через [...arr], чтобы не поломать оригинал
     return [...arr].sort((a, b) => b - a);
 }
 
