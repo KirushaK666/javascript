@@ -1,6 +1,5 @@
 import { fib } from '../lab2/lab2.js';
 
-
 /**
  * Возвращает дробную часть числа.
  *
@@ -8,7 +7,9 @@ import { fib } from '../lab2/lab2.js';
  * @return {number} дробную часть num.
  */
 export function getDecimal(num) {
-    return Number((num - Math.floor(num)).toFixed(15));
+    if (!num) return 0;
+    const absNum = Math.abs(num); 
+    return Number((absNum - Math.floor(absNum)).toFixed(15));
 }
 
 /**
@@ -18,7 +19,8 @@ export function getDecimal(num) {
  * @return {string} нормализованную url.
  */
 export function normalizeUrl(url) {
-    // Безопасная замена строго в начале строки
+    if (!url) return 'https://';
+
     if (url.startsWith('http://')) {
         return 'https://' + url.slice(7);
     }
@@ -37,8 +39,8 @@ export function normalizeUrl(url) {
  * @return {boolean} true, если в str есть спам, иначе false.
  */
 export function checkSpam(str) {
+    if (!str) return false;
     const lowerStr = str.toLowerCase();
-    // Избыточный тернарный оператор удален
     return lowerStr.includes('xxx') || lowerStr.includes('viagra');
 }
 
@@ -50,9 +52,11 @@ export function checkSpam(str) {
  * @return {string} копию str, сокращённую до maxlength символов с троеточием в виде последнего символа, если её длина превышает maxlength, иначе просто str. 
  */
 export function truncate(str, maxlength) {
+    if (!str) return '';
     if (str.length <= maxlength) {
         return str;
     }
+    if (maxlength <= 0) return '\u2026';
     return str.slice(0, maxlength - 1) + '\u2026';
 }
 
@@ -63,9 +67,11 @@ export function truncate(str, maxlength) {
  * @return {string} str в "верблюжьем стиле".
  */
 export function camelize(str) {
-    const arr = str.split('-');
-    // Чтобы избежать ошибок с пустыми массивами, берем первый элемент или пустую строку
-    return (arr[0] || '') + arr.slice(1).map(ucFirst).join('');
+    if (!str) return '';
+    return str
+        .split('-')
+        .map((word, index) => index === 0 ? word : ucFirst(word))
+        .join('');
 }
 
 /**
@@ -85,8 +91,7 @@ function ucFirst(str) {
  * @param {number} n - натуральное число, количество элементов в массиве.
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
-export function fib(n) {
-    // Надежная проверка на натуральное число
+export function fibs(n) {
     if (!Number.isInteger(n) || n <= 0) {
         return null;
     }
@@ -106,21 +111,8 @@ export function fib(n) {
  * @return {number[]} отсортированную по убыванию копию arr.
  */
 export function arrReverseSorted(arr) {
-    // Красивое и современное копирование массива через спред-оператор
-    return [...arr].sort(backwardsSort);
-}
-
-/**
- * Критерий сортировки чисел по убыванию.
- *
- * @param {number} a - первое число.
- * @param {number} b - второе число.
- * @return {number} 1, если a < b, 0, если a == b, и -1, если a > b.
- */
-function backwardsSort(a, b) {
-    if (a < b) return 1;
-    if (a === b) return 0;
-    if (a > b) return -1;
+    if (!arr) return [];
+    return [...arr].sort((a, b) => b - a);
 }
 
 /**
@@ -130,6 +122,17 @@ function backwardsSort(a, b) {
  * @return {Array} копию arr без повторений.
  */
 export function unique(arr) {
-    // Создание массива из Set в одну строчку
+    if (!arr) return [];
     return [...new Set(arr)];
+}
+
+if (typeof window !== 'undefined') {
+    window.getDecimal = getDecimal;
+    window.normalizeUrl = normalizeUrl;
+    window.checkSpam = checkSpam;
+    window.truncate = truncate;
+    window.camelize = camelize;
+    window.fibs = fibs;
+    window.arrReverseSorted = arrReverseSorted;
+    window.unique = unique;
 }
