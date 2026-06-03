@@ -30,7 +30,7 @@
 
         if (event.code === 'KeyE' && event.ctrlKey) {
             event.preventDefault();
-            
+            editor.value = '';
             editor.hidden = false;
             view.hidden = true;
             editor.focus(); 
