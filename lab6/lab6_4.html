@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Редактируемая таблица</title>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    td {
+      border: 1px solid black;
+      padding: 10px;
+      min-width: 150px;
+      vertical-align: top;
+    }
+    textarea {
+      resize: none;
+      width: 100%;
+      box-sizing: border-box;
+    }
+  </style>
+</head>
+<body>
+
+  <table id="editable">
+    <tr>
+      <td data-id="cell_1">Ячейка 1</td>
+      <td data-id="cell_2">Ячейка 2</td>
+    </tr>
+    <tr>
+      <td data-id="cell_3">Ячейка 3</td>
+      <td data-id="cell_4">Ячейка 4</td>
+    </tr>
+  </table>
+
+  <script>
+    'use strict';
+
+    const table = document.getElementById('editable');
+    
+    let isEditing = false; 
+
+    const cells = table.querySelectorAll('td');
+    cells.forEach(td => {
+      const savedValue = sessionStorage.getItem(td.dataset.id);
+      if (savedValue !== null) {
+        td.innerHTML = savedValue;
+      }
+    });
+
+    table.addEventListener('click', editCell);
+
+    function editCell(event) {
+      if (isEditing) return;
+
+      const cell = event.target.closest('td');
+      
+      if (!cell || !table.contains(cell)) return;
+
+      isEditing = true; 
+      const originalHTML = cell.innerHTML;
+
+      cell.innerHTML = `
+        <textarea>${originalHTML}</textarea>
+        <div style="margin-top: 5px;">
+          <button class="ok-btn">OK</button>
+          <button class="cancel-btn">Отмена</button>
+        </div>
+      `;
+
+      const textarea = cell.querySelector('textarea');
+      textarea.focus();
+
+      const controls = cell.querySelector('div');
+      controls.addEventListener('click', (e) => {
+        e.stopPropagation(); 
+        if (e.target.classList.contains('ok-btn')) {
+          const newValue = textarea.value;
+          cell.innerHTML = newValue; 
+          
+          sessionStorage.setItem(cell.dataset.id, newValue);
+          
+          isEditing = false; 
+        }
+
+        if (e.target.classList.contains('cancel-btn')) {
+          cell.innerHTML = originalHTML; 
+          isEditing = false; 
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
