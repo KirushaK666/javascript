@@ -6,9 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Тестирование lab3.js</title>
-    <!-- добавим стили mocha для отображения результатов -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.css">
-    <!-- добавляем сам фреймворк mocha -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/mocha/3.2.0/mocha.js"></script>
     <script>
         mocha.setup('bdd');
@@ -23,7 +21,6 @@
     <div id="mocha"></div>
 
     <script type="module">
-        // Импортируем исправленные функции из файла
         import { 
             getDecimal, 
             normalizeUrl, 
