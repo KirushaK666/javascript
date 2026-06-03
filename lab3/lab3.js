@@ -85,7 +85,7 @@ function ucFirst(str) {
  * @param {number} n - натуральное число, количество элементов в массиве.
  * @return {bigint[]|null} null, если n ненатуральное, иначе массив чисел Фибоначчи.
  */
-export function fibs(n) {
+export function fib(n) {
     // Надежная проверка на натуральное число
     if (!Number.isInteger(n) || n <= 0) {
         return null;
