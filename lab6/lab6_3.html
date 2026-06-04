@@ -10,6 +10,7 @@
       padding: 5px;
       border: 1px solid #ccc;
       box-sizing: border-box;
+      font-family: sans-serif;
     }
   </style>
 </head>
@@ -24,30 +25,44 @@
     const view = document.getElementById('view');
     const editor = document.getElementById('editor');
 
+    // Фраза по умолчанию
+    const DEFAULT_PLACEHOLDER = 'Нажмите Ctrl+E для редактирования';
+
+    // 1. При загрузке проверяем, есть ли сохраненный текст
     const savedText = localStorage.getItem('editable_text');
     
-    if (savedText) {
+    if (savedText !== null) {
+        // Если в localStorage есть запись (даже пустая строка), выводим её
         view.innerText = savedText;
         editor.value = savedText;
     } else {
-        view.innerText = 'Нажмите Ctrl+E для редактирования';
-        editor.value = 'Нажмите Ctrl+E для редактирования';
+        // Если сайт открыт ВПЕРВЫЕ в этом браузере, ставим заглушку
+        view.innerText = DEFAULT_PLACEHOLDER;
+        editor.value = DEFAULT_PLACEHOLDER;
     }
 
     document.addEventListener('keydown', action);
 
     function action(event) {
 
+        // Нажатие Ctrl + E (Редактирование)
         if (event.code === 'KeyE' && (event.ctrlKey || event.metaKey)) {
             if (!editor.hidden) return; 
             
             event.preventDefault();
             editor.hidden = false;
             view.hidden = true;
+
+            // Если внутри всё еще висит стандартное приветствие — очищаем поле
+            if (editor.value === DEFAULT_PLACEHOLDER) {
+                editor.value = '';
+            }
+
             editor.focus(); 
             return;
         }
 
+        // Нажатие Ctrl + S (Сохранение)
         if (event.code === 'KeyS' && (event.ctrlKey || event.metaKey)) {
             if (editor.hidden) return; 
 
@@ -56,17 +71,27 @@
             view.hidden = false;
             
             view.innerText = editor.value;
+            // Точно записываем текущее значение в память браузера
             localStorage.setItem('editable_text', editor.value);
             return;
         }
 
+        // Нажатие Escape (Отмена изменений)
         if (event.code === 'Escape') {
             if (editor.hidden) return;
 
             editor.hidden = true;
             view.hidden = false;
-            editor.value = view.innerText;
-            editor.blur(); // Убираем активный фокус с textarea
+            
+            const checkText = localStorage.getItem('editable_text');
+            if (checkText === null) {
+                editor.value = DEFAULT_PLACEHOLDER;
+                view.innerText = DEFAULT_PLACEHOLDER;
+            } else {
+                editor.value = view.innerText;
+            }
+            
+            editor.blur(); 
             return;
         }
     }
