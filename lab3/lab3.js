@@ -110,8 +110,8 @@ export function fibs(n) {
 /**
  * Возвращает отсортированную по убыванию копию массива чисел.
  *
- * @param {number[]} arr - массив чисел.
- * @return {number[]} отсортированную по убыванию копию arr.
+ * @param {arr[]} arr - массив чисел.
+ * @return {arr[]} отсортированную по убыванию копию arr.
  */
 export function arrReverseSorted(arr) {
     if (!arr) return [];
