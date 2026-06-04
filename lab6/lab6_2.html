@@ -1,45 +1,50 @@
 <!DOCTYPE html>
 <html lang="ru">
- <head>
+<head>
   <meta charset="UTF-8">
   <title>Плейсхолдер-подсказка</title>
- <style>
-  .placeholder {
-   color: #0000ff;
-  }
- </style>
- </head>
- <body>
+  <style>
+    .placeholder {
+      color: #0000ff;
+    }
+  </style>
+</head>
+<body>
 
-  <p class="placeholder" hidden></p>
+  <p id="hint" hidden></p>
+  
   <input id="field" class="placeholder" data-placeholder="Введите что-нибудь">
 
   <script>
-   'use strict';
+    'use strict';
 
-   field.addEventListener('focus', movePlaceholderUp);
-   field.addEventListener('blur', movePlaceholderDown);
+    const field = document.getElementById('field');
+    const hint = document.getElementById('hint');
 
-   function movePlaceholderUp() {
+    field.value = field.dataset.placeholder;
 
-       field.classList.remove('placeholder');
-       field.previousElementSibling.hidden = false;
-       field.previousElementSibling.innerText = field.dataset.placeholder + ':';
+    field.addEventListener('focus', movePlaceholderUp);
+    field.addEventListener('blur', movePlaceholderDown);
 
-   }
+    function movePlaceholderUp() {
+      if (field.value === field.dataset.placeholder) {
+        field.value = '';
+        field.classList.remove('placeholder');
+      }
 
-   function movePlaceholderDown() {
+      hint.hidden = false;
+      hint.innerText = field.dataset.placeholder + ':';
+    }
 
-       field.previousElementSibling.hidden = true;
+    function movePlaceholderDown() {
+      hint.hidden = true;
 
-       if (field.value == '') {
-           field.value = field.dataset.placeholder;
-           field.classList.add('placeholder');
-       }
-
-   }
+      if (field.value === '') {
+        field.value = field.dataset.placeholder;
+        field.classList.add('placeholder');
+      }
+    }
   </script>
-  <noscript>Страница может работать некорректно, т.к. отключена поддержка JS.</noscript>
 
- </body>
+</body>
 </html>
